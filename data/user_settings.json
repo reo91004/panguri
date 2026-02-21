@@ -1,0 +1,26 @@
+{
+  "284242213351849985": {
+    "language": "ko",
+    "slow": false,
+    "voice": "ko-KR-SunHiNeural",
+    "rate": "+0%",
+    "pitch": "+0Hz",
+    "effect": "none"
+  },
+  "700274340503093321": {
+    "language": "ko",
+    "slow": false,
+    "voice": "ko-KR-SunHiNeural",
+    "rate": "+0%",
+    "pitch": "+0Hz",
+    "effect": "none"
+  },
+  "99836424131473408": {
+    "language": "ko",
+    "slow": false,
+    "voice": "ko-KR-SunHiNeural",
+    "rate": "+50%",
+    "pitch": "+0Hz",
+    "effect": "none"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(python -m py_compile:*)",
+      "WebSearch",
+      "WebFetch(domain:www.goodjobkorean.com)",
+      "WebFetch(domain:flexiclasses.com)",
+      "WebFetch(domain:www.fluentu.com)",
+      "WebFetch(domain:promova.com)",
+      "WebFetch(domain:www.90daykorean.com)",
+      "WebFetch(domain:migaku.com)",
+      "Bash(head:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:tts.travisvn.com)",
+      "WebFetch(domain:www.libhunt.com)",
+      "Bash(python:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.typecast.ai)",
+      "WebFetch(domain:www.supertone.ai)",
+      "WebFetch(domain:www.oreateai.com)",
+      "WebFetch(domain:json2video.com)",
+      "WebFetch(domain:typecast.ai)",
+      "Bash(grep ko-KR:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:tiktokvoice.net)",
+      "WebFetch(domain:countik.com)",
+      "WebFetch(domain:qiita.com)",
+      "WebFetch(domain:docs.byteplus.com)",
+      "WebFetch(domain:gesserit.co)",
+      "WebFetch(domain:tiktok-tts.weilbyte.dev)",
+      "Bash(echo ===== $file =====:*)",
+      "Bash(curl -s \"https://api.github.com/repos/oscie57/tiktok-voice/contents/tiktok_voice\" 2>/dev/null | python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(x['name']\\) for x in data]\" 2>/dev/null)",
+      "Bash(curl -s \"https://api.github.com/repos/oscie57/tiktok-voice/contents/\" 2>/dev/null | python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(x['name']\\) for x in data]\" 2>/dev/null)",
+      "Bash(curl -s \"https://api.github.com/repos/oscie57/tiktok-voice/contents/constants.py\" 2>/dev/null | python3 -c \"import sys,json,base64; data=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(data.get\\('content',''\\)\\).decode\\('utf-8'\\)\\)\" 2>/dev/null)",
+      "Bash(curl -s \"https://api.github.com/repos/oscie57/tiktok-voice/contents/main.py\" 2>/dev/null | python3 -c \"import sys,json,base64; data=json.load\\(sys.stdin\\); print\\(base64.b64decode\\(data.get\\('content',''\\)\\).decode\\('utf-8'\\)\\)\" 2>/dev/null)"
+    ]
+  }
+}
