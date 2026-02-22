@@ -19,6 +19,7 @@ from config import (
     KOREAN_JAMO_READINGS, AUDIO_CACHE_MAX_SIZE, AUDIO_CACHE_MAX_BYTES,
     STANDALONE_PUNCTUATION,
 )
+from services.sovits_client import SoVITSClient
 
 logger = logging.getLogger("tts-bot.engine")
 
@@ -77,7 +78,7 @@ class AudioCache:
 
 
 class TTSEngine:
-    """멀티 TTS 엔진 (edge-tts, gTTS) + LRU 캐시."""
+    """멀티 TTS 엔진 (edge-tts, gTTS, GPT-SoVITS) + LRU 캐시."""
 
     def __init__(self):
         self.temp_dir = TEMP_DIR
@@ -85,6 +86,7 @@ class TTSEngine:
         self._abbreviations = sorted(
             KOREAN_ABBREVIATIONS.items(), key=lambda kv: len(kv[0]), reverse=True
         )
+        self.sovits_client = SoVITSClient()
 
     @staticmethod
     def _convert_standalone_punctuation(text: str) -> str:
@@ -161,6 +163,10 @@ class TTSEngine:
         pitch = pitch or DEFAULT_PITCH
 
         # 접두사 기반 엔진 디스패치
+        if voice.startswith("sovits:"):
+            character_id = voice[7:]
+            return await self._synthesize_sovits(text, character_id)
+
         if voice.startswith("gtts:"):
             return await self._synthesize_gtts_primary(text, lang=voice[5:])
 
@@ -340,6 +346,24 @@ class TTSEngine:
         tts = gTTS(text=text, lang=lang, slow=slow)
         tts.save(str(filepath))
 
+    async def _synthesize_sovits(
+        self, text: str, character_id: str,
+    ) -> tuple[io.IOBase, Callable]:
+        """GPT-SoVITS 캐릭터 음성으로 합성한다."""
+        cache_voice = f"sovits:{character_id}"
+        cached = self._cache.get(text, cache_voice, "", "")
+        if cached is not None:
+            logger.info("SoVITS 캐시 히트")
+            return io.BytesIO(cached), lambda: None
+
+        try:
+            data = await self.sovits_client.synthesize(text, character_id)
+            self._cache.put(text, cache_voice, "", "", data)
+            return io.BytesIO(data), lambda: None
+        except Exception as e:
+            logger.warning(f"SoVITS 합성 실패, edge-tts로 폴백: {e}")
+            return await self._edge_fallback(text)
+
     def cleanup_all(self) -> None:
         """모든 임시 오디오 파일을 삭제하고 캐시를 초기화한다."""
         for file in self.temp_dir.glob("*.mp3"):
@@ -348,3 +372,8 @@ class TTSEngine:
             except OSError:
                 pass
         self._cache.clear()
+
+    async def cleanup_all_async(self) -> None:
+        """모든 리소스를 비동기적으로 정리한다."""
+        self.cleanup_all()
+        await self.sovits_client.close()

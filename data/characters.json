@@ -1,0 +1,9 @@
+{
+  "example": {
+    "display_name": "예시 캐릭터",
+    "refer_wav_path": "D:/GPT-SoVITS/references/example.wav",
+    "prompt_text": "안녕하세요, 저는 예시 캐릭터입니다.",
+    "prompt_language": "ko",
+    "text_language": "ko"
+  }
+}

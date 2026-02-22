@@ -7,6 +7,10 @@ load_dotenv()
 # 봇 설정
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 
+# GPT-SoVITS 설정
+SOVITS_API_URL = os.getenv("SOVITS_API_URL", "http://localhost:9880")
+SOVITS_REQUEST_TIMEOUT = float(os.getenv("SOVITS_REQUEST_TIMEOUT", "30"))
+
 # 경로
 BASE_DIR = Path(__file__).parent
 TEMP_DIR = BASE_DIR / "temp"
@@ -146,3 +150,22 @@ KOREAN_ABBREVIATIONS: dict[str, str] = {
     "ㄷㅊ": "닥쳐",
     "ㅁㄹ": "몰라",
 }
+
+
+def _load_sovits_presets() -> None:
+    """data/characters.json에서 캐릭터 음성을 VOICE_PRESETS에 추가."""
+    characters_file = DATA_DIR / "characters.json"
+    if not characters_file.exists():
+        return
+    try:
+        import json as _json
+        with open(characters_file, "r", encoding="utf-8") as f:
+            characters = _json.load(f)
+        for char_id, char_data in characters.items():
+            display_name = char_data.get("display_name", char_id)
+            VOICE_PRESETS[display_name] = f"sovits:{char_id}"
+    except Exception:
+        pass
+
+
+_load_sovits_presets()

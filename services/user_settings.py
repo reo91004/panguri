@@ -54,6 +54,8 @@ class UserSettings:
         """지원하지 않는 음성 ID를 기본값으로 정규화한다."""
         if voice in VOICE_PRESETS.values():
             return voice
+        if voice.startswith("sovits:"):
+            return voice
         return DEFAULT_VOICE
 
     @staticmethod

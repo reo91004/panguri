@@ -40,10 +40,16 @@ class VoiceSelect(discord.ui.Select):
     def __init__(self, current_voice: str):
         options = []
         for name, voice_id in VOICE_PRESETS.items():
+            if voice_id.startswith("sovits:"):
+                desc = "캐릭터 음성"
+            elif voice_id.startswith("gtts:"):
+                desc = "구글 번역기"
+            else:
+                desc = "Edge TTS"
             options.append(
                 discord.SelectOption(
                     label=name,
-                    description=voice_id,
+                    description=desc,
                     value=voice_id,
                     default=(voice_id == current_voice),
                 )

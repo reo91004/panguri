@@ -98,6 +98,15 @@ class TTSBot(commands.Bot):
 
             self._synced = True
 
+        # GPT-SoVITS 서버 연결 확인
+        sovits = self.tts_engine.sovits_client
+        if await sovits.health_check():
+            logger.info(
+                f"GPT-SoVITS 서버 연결됨 ({len(sovits.get_all_characters())}개 캐릭터)"
+            )
+        else:
+            logger.warning("GPT-SoVITS 서버에 연결할 수 없습니다 (캐릭터 음성 비활성화)")
+
         await self.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.listening,
@@ -116,7 +125,7 @@ class TTSBot(commands.Bot):
         for vc in self.voice_clients:
             await vc.disconnect()
 
-        self.tts_engine.cleanup_all()
+        await self.tts_engine.cleanup_all_async()
         await super().close()
 
 
